@@ -47,14 +47,22 @@ class RemainingTime:
         self.mins = 0
         self.secs = 0
 
-    def formatToNormal(self):
+    def checkTimerOveflow(self):
         if self.mins >= 60:
             self.addHours(int(self.mins / 60))
             self.mins -= int(self.mins / 60) * 60
 
+        elif self.mins < 0 and self.hours > 0:
+            self.hours -= 1
+            self.mins = 59
+
         if self.secs >= 60:
             self.addMins(int(self.secs / 60))
             self.secs -= int(self.secs / 60) * 60
+
+        elif self.secs < 0 and self.mins >= 0:
+            self.mins -= 1
+            self.secs = 59
 
     def prettyString(self):
         hours = int(self.hours)
@@ -79,19 +87,13 @@ class RemainingTime:
 
     def substract(self):
         global finish
-        if self.secs == 0:
-            if self.mins == 0:
-                if self.hours == 0:
-                    finish = True
-                    action()
-                else:
-                    self.mins += 59
-                    self.hours -= 1
-            else:
-                self.secs += 59
-                self.mins -= 1
+        if self.calculateSeconds() == 1:
+            self.secs -= 1
+            finish = True
+            action()
         else:
             self.secs -= 1
+            self.checkTimerOveflow()
 
 
 remainingTime = RemainingTime()
@@ -113,7 +115,7 @@ def action():
 
 
 def updateTimeLabel():
-    remainingTime.formatToNormal()
+    remainingTime.checkTimerOveflow()
     app.label("Time", remainingTime.prettyString())
 
 
