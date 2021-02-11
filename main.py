@@ -47,7 +47,7 @@ class RemainingTime:
         self.mins = 0
         self.secs = 0
 
-    def checkTimerOveflow(self):
+    def checkTimerOverflow(self):
         if self.mins >= 60:
             self.addHours(int(self.mins / 60))
             self.mins -= int(self.mins / 60) * 60
@@ -93,7 +93,7 @@ class RemainingTime:
             action()
         else:
             self.secs -= 1
-            self.checkTimerOveflow()
+            self.checkTimerOverflow()
 
 
 remainingTime = RemainingTime()
@@ -115,7 +115,7 @@ def action():
 
 
 def updateTimeLabel():
-    remainingTime.checkTimerOveflow()
+    remainingTime.checkTimerOverflow()
     app.label("Time", remainingTime.prettyString())
 
 
