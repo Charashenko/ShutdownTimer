@@ -87,12 +87,11 @@ class RemainingTime:
 
     def substract(self):
         global finish
-        if self.calculateSeconds() == 1:
-            self.secs -= 1
+        self.secs -= 1
+        if self.calculateSeconds() == 0:
             finish = True
             action()
         else:
-            self.secs -= 1
             self.checkTimerOverflow()
 
 
@@ -112,6 +111,7 @@ def action():
         os.system("shutdown -l")
     elif actionToDo == "Custom command":
         os.system(app.getEntry("command"))
+        stopTimer()
 
 
 def updateTimeLabel():
